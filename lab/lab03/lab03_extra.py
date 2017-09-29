@@ -112,30 +112,30 @@ def interleaved_sum(n, odd_term, even_term):
         else:
             return even_term(i)+helper(i+1)
     return helper(1)
-# def ten_pairs(n):
-#     """Return the number of ten-pairs within positive integer n.
+def ten_pairs(n):
+    """Return the number of ten-pairs within positive integer n.
 
-#     >>> ten_pairs(7823952)
-#     3
-#     >>> ten_pairs(55055)
-#     6
-#     >>> ten_pairs(9641469)
-#     6
-#     """
-#     "*** YOUR CODE HERE ***"
-#     a=[]
-#     while n>0:
-#         a.append(n%10)
-#         n=n//10
-#     i,j,result=0,1,0
-#     while i<len(a):
-#         j=i+1
-#         while j<len(a):
-#             if a[i]+a[j]==10:
-#                 result += 1
-#             j=j+1
-#         i=i+1
-#     return result
+    >>> ten_pairs(7823952)
+    3
+    >>> ten_pairs(55055)
+    6
+    >>> ten_pairs(9641469)
+    6
+    """
+    "*** YOUR CODE HERE ***"
+    a=[]
+    while n>0:
+        a.append(n%10)
+        n=n//10
+    i,j,result=0,1,0
+    while i<len(a):
+        j=i+1
+        while j<len(a):
+            if a[i]+a[j]==10:
+                result += 1
+            j=j+1
+        i=i+1
+    return result
 
 def ten_pairs(n):
     """Return the number of ten-pairs within positive integer n.
