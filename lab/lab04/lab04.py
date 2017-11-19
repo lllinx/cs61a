@@ -13,6 +13,11 @@ def if_this_not_that(i_list, this):
     5
     """
     "*** YOUR CODE HERE ***"
+    for element in i_list:
+        if element>this:
+            print(element)
+        else:
+            print("that")
 
 # Q4
 def make_city(name, lat, lon):
@@ -64,6 +69,7 @@ def distance(city1, city2):
     5.0
     """
     "*** YOUR CODE HERE ***"
+    return sqrt((get_lon(city1)-get_lon(city2))**2+(get_lat(city1)-get_lat(city2))**2)
 
 # Q5
 def closer_city(lat, lon, city1, city2):
@@ -81,6 +87,13 @@ def closer_city(lat, lon, city1, city2):
     'Bucharest'
     """
     "*** YOUR CODE HERE ***"
+    city=make_city('na',lat,lon)
+    dis1=distance(city,city1)
+    dis2=distance(city,city2)
+    if dis1>dis2:
+        return get_name(city2)
+    else:
+        return get_name(city1)
 
 # Connect N: Q6-11
 ######################
@@ -95,7 +108,7 @@ def create_row(size):
     ['-', '-', '-', '-', '-']
     """
     "*** YOUR CODE HERE ***"
-    return _______
+    return ['-' for i in range(size)]
 
 
 def create_board(rows, columns):
@@ -105,7 +118,7 @@ def create_board(rows, columns):
     [['-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-'], ['-', '-', '-', '-', '-']]
     """
     "*** YOUR CODE HERE ***"
-    return _______
+    return [create_row(columns) for i in range(rows)]
 
 
 def replace_elem(lst, index, elem):
@@ -121,7 +134,7 @@ def replace_elem(lst, index, elem):
     """
     assert index >= 0 and index < len(lst), 'Index is out of bounds'
     "*** YOUR CODE HERE ***"
-    return _______
+    return lst[:index]+[elem]+lst[index+1:]
 
 
 def get_piece(board, row, column):
@@ -137,7 +150,7 @@ def get_piece(board, row, column):
     '-'
     """
     "*** YOUR CODE HERE ***"
-    return _______
+    return board[row][column]
 
 
 def put_piece(board, max_rows, column, player):
@@ -161,6 +174,12 @@ def put_piece(board, max_rows, column, player):
     -1
     """
     "*** YOUR CODE HERE ***"
+    for i in range(max_rows-1,-1,-1):
+        if board[i][column]=='-':
+            new_row=replace_elem(board[i],column,player)
+            new_board=replace_elem(board,i,new_row)
+            return (i, new_board)
+    return (-1, board)
 
 
 def make_move(board, max_rows, max_cols, col, player):
@@ -189,6 +208,9 @@ def make_move(board, max_rows, max_cols, col, player):
     -1
     """
     "*** YOUR CODE HERE ***"
+    if col<0 or col>max_cols-1:
+        return (-1, board)
+    return put_piece(board,max_rows,col,player)
 
 def print_board(board, max_rows, max_cols):
     """Prints the board. Row 0 is at the top, and column 0 at the far left.
@@ -204,6 +226,12 @@ def print_board(board, max_rows, max_cols):
     X -
     """
     "*** YOUR CODE HERE ***"
+    for i in range(max_rows):
+        row=''
+        for j in range(max_cols):
+            row=row+board[i][j]+' '
+        print(row.strip())
+
 
 def check_win_row(board, max_rows, max_cols, num_connect, row, player):
     """ Returns True if the given player has a horizontal win
@@ -228,6 +256,14 @@ def check_win_row(board, max_rows, max_cols, num_connect, row, player):
     False
     """
     "*** YOUR CODE HERE ***"
+    for i in range(max_cols-num_connect+1):
+        t=0
+        for j in range(i,i+num_connect):
+            if board[row][j]==player:
+                t+=1
+        if t==num_connect:
+            return True
+    return False
 
 def check_win_column(board, max_rows, max_cols, num_connect, col, player):
     """ Returns True if the given player has a vertical win in the given column,
@@ -253,6 +289,17 @@ def check_win_column(board, max_rows, max_cols, num_connect, col, player):
     False
     """
     "*** YOUR CODE HERE ***"
+    adjacent=0
+    for row in range(max_rows):
+        piece=get_piece(board,row,col)
+        if piece==player:
+            adjacent+=1
+        else:
+            adjacent=0
+        if adjacent>=num_connect:
+            return True
+    return False
+
 
 def check_win(board, max_rows, max_cols, num_connect, row, col, player):
     """Returns True if the given player has any kind of win after placing a
@@ -289,7 +336,7 @@ def check_win(board, max_rows, max_cols, num_connect, row, col, player):
     diagonal_win = check_win_diagonal(board, max_rows, max_cols, num_connect,
                                       row, col, player)
     "*** YOUR CODE HERE ***"
-    return _______
+    return check_win_row(board, max_rows, max_cols, num_connect, row, player) or check_win_column(board, max_rows, max_cols, num_connect, col, player) or diagonal_win
 
 ###############################################################
 ### Functions for reference when solving the other problems ###

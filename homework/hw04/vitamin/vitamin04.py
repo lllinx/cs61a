@@ -21,7 +21,8 @@ def taxicab(a, b):
     9
     """
     "*** YOUR CODE HERE ***"
-
+    return abs(street(a)-street(b)) + abs(avenue(a)-avenue(b))
+from math import sqrt
 def squares(s):
     """Returns a new list containing square roots of the elements of the
     original list that are perfect squares.
@@ -34,3 +35,9 @@ def squares(s):
     []
     """
     "*** YOUR CODE HERE ***"
+    output=[]
+    for i in range(len(s)):
+        if sqrt(s[i])-round(sqrt(s[i]))==0:
+            output.append(round(sqrt(s[i])))
+        i=i+1
+    return output
