@@ -22,6 +22,12 @@ def delete(t, target):
         wedding dress
     """
     "*** YOUR CODE HERE ***"
+    kept_branches = []
+    for b in branches(t):
+        if root(b) != target:
+            kept_branches += [delete(b, target)]
+    return tree(root(t), kept_branches)
+
 
 # Shakespeare and Dictionaries
 def build_successors_table(tokens):
@@ -42,8 +48,8 @@ def build_successors_table(tokens):
     prev = '.'
     for word in tokens:
         if prev not in table:
-            "*** YOUR CODE HERE ***"
-        "*** YOUR CODE HERE ***"
+            table[prev]=[]
+        table[prev]+=[word]
         prev = word
     return table
 
@@ -55,6 +61,9 @@ def construct_sent(word, table):
     result = ' '
     while word not in ['.', '!', '?']:
         "*** YOUR CODE HERE ***"
+        choice=random.choice(table[word])
+        result=str(choice)+result
+        word=choice
     return result + word
 
 def shakespeare_tokens(path='shakespeare.txt', url='http://composingprograms.com/shakespeare.txt'):
@@ -68,8 +77,8 @@ def shakespeare_tokens(path='shakespeare.txt', url='http://composingprograms.com
         return shakespeare.read().decode(encoding='ascii').split()
 
 # Uncomment the following two lines
-# tokens = shakespeare_tokens()
-# table = build_successors_table(tokens)
+tokens = shakespeare_tokens()
+table = build_successors_table(tokens)
 
 def random_sent():
     import random
