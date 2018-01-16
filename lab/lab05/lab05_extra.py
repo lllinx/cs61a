@@ -28,6 +28,24 @@ def delete(t, target):
             kept_branches += [delete(b, target)]
     return tree(root(t), kept_branches)
 
+def kstairs(n, k):
+    """Give the number of ways to take n steps, given that at each step, 
+    you can choose to take 1, 2, ... k-2, k-1 or k steps.
+
+    >>> kstairs(5, 2)
+    8
+    >>> kstairs(5, 5)
+    16
+    >>> kstairs(10, 5)
+    464
+    """
+    ### YOUR CODE HERE ###
+    if n == 0:
+        return 0
+    if n <= k:
+        return 2**(n-1)
+    return sum(kstairs(n-i,k) for i in range(1,k+1))
+
 
 # Shakespeare and Dictionaries
 def build_successors_table(tokens):
