@@ -103,6 +103,11 @@ def balanced(m):
     False
     """
     "*** YOUR CODE HERE ***"
+    # if is_leaf(m):
+
+    # for s in sides(m):
+    #     return length(s)*total_weight(s)
+
 
 def with_totals(m):
     """Return a mobile with total weights stored as the root of each mobile.
@@ -149,6 +154,36 @@ def make_withdraw(balance, password):
     "Your account is locked. Attempts: ['hwat', 'a', 'n00b']"
     """
     "*** YOUR CODE HERE ***"
+    attempts=[]
+    # def withdraw(amount,code):
+    #     nonlocal balance, attempts
+    #     if code==password:
+    #         if amount > balance:
+    #             return 'Insufficient funds'
+    #         else:
+    #             balance = balance - amount
+    #             return balance
+    #     else:
+    #         if len(attempts)<=3:
+    #             attempts.append(code)
+    #             return 'Incorrect password'
+    #         else:
+    #             return "Your account is locked. Attempts: {0}".format(attempts)
+    # return withdraw
+    def withdraw(amount,code):
+        nonlocal balance, attempts
+        if len(attempts)>=3:
+            return "Your account is locked. Attempts: {0}".format(attempts)
+        if code!=password:
+            attempts.append(code)
+            return "Incorrect password"
+        if amount>balance:
+            return 'Insufficient funds'
+        balance=balance-amount
+        return balance
+    return withdraw
+
+
 
 def make_joint(withdraw, old_password, new_password):
     """Return a password-protected withdraw function that has joint access to
