@@ -155,21 +155,6 @@ def make_withdraw(balance, password):
     """
     "*** YOUR CODE HERE ***"
     attempts=[]
-    # def withdraw(amount,code):
-    #     nonlocal balance, attempts
-    #     if code==password:
-    #         if amount > balance:
-    #             return 'Insufficient funds'
-    #         else:
-    #             balance = balance - amount
-    #             return balance
-    #     else:
-    #         if len(attempts)<=3:
-    #             attempts.append(code)
-    #             return 'Incorrect password'
-    #         else:
-    #             return "Your account is locked. Attempts: {0}".format(attempts)
-    # return withdraw
     def withdraw(amount,code):
         nonlocal balance, attempts
         if len(attempts)>=3:
@@ -224,3 +209,15 @@ def make_joint(withdraw, old_password, new_password):
     "Your account is locked. Attempts: ['my', 'secret', 'password']"
     """
     "*** YOUR CODE HERE ***"
+    error=withdraw(0,old_password)
+    if type(error)==str:
+        return error
+    def inner(amount,code):
+        if code in [old_password,new_password]:
+            return withdraw(amount,old_password)
+        return withdraw(amount,code)
+    return inner
+
+
+
+
