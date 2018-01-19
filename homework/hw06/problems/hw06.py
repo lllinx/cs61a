@@ -103,12 +103,15 @@ def balanced(m):
     False
     """
     "*** YOUR CODE HERE ***"
-    # if is_leaf(m):
-
-    # for s in sides(m):
-    #     return length(s)*total_weight(s)
-
-
+    if is_weight(m):
+        return True
+    else:
+        left,right = sides(m)
+        left_s,right_s = end(left),end(right)
+        w1=length(left)*total_weight(left_s)
+        w2=length(right)*total_weight(right_s)
+        return balanced(left_s) and balanced(right_s) and w1==w2
+        
 def with_totals(m):
     """Return a mobile with total weights stored as the root of each mobile.
 
