@@ -161,9 +161,11 @@ class Player(object):
         for item in self.backpack:
             if type(item) == Key:
                 key = item
-                print(self.place.name,'is now unlocked!')
-                self.place.locked = False
-            
+                place_to_unlock = self.place.get_neighbor(place)
+                key.use(place_to_unlock)
+                return
+        print(place,"can't be unlocked without a key!")
+
 
 
 class Character(object):
@@ -186,6 +188,11 @@ class Thing(object):
 """ Implement Key here! """
 class Key(Thing):
     def use(self,place):
+        if place.locked:
+            place.locked = False
+            print(place.name, "is now unlocked!")
+        else:
+            print(place.name, "is already unlocked!")
 
 
 

@@ -17,3 +17,10 @@ def vending_machine(snacks):
     'chocolate'
     """
     "*** YOUR CODE HERE ***"
+    index = 0
+    def cycle():
+        nonlocal index
+        result = snacks[index]
+        index = (index+1)%len(snacks)
+        return result
+    return cycle
