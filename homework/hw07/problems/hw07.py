@@ -22,7 +22,22 @@ class Fib():
         self.value = 0
 
     def next(self):
-        "*** YOUR CODE HERE ***"
+        # if self.value==0:
+        #     self.previous=0
+        #     self.value=1
+        # else:
+        #     self.value=self.previous+self.value
+        #     self.previous=self.value-self.previous
+        # return self
+        if self.value==0:
+            result=Fib()
+            result.value=1
+        else:
+            result=Fib()
+            result.value=self.previous+self.value
+        # self.previous,self.value=self.value,result.value
+        result.previous = self.value
+        return result
 
     def __repr__(self):
         return str(self.value)
