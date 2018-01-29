@@ -128,13 +128,20 @@ def with_totals(m):
     [None, None]
     """
     "*** YOUR CODE HERE ***"
+    # if is_weight(m):
+    #     return m
+    # else:
+    #     left,right=sides(m)
+    #     left_s,right_s=end(left),end(right)
+    #     w1,w2=total_weight(left_s),total_weight(right_s)
+    #     return tree(w1+w2,[with_totals(left_s),with_totals(right_s)])
+    
     if is_weight(m):
         return m
-    else:
-        left,right=sides(m)
-        left_s,right_s=end(left),end(right)
-        w1,w2=total_weight(left_s),total_weight(right_s)
-        return tree(w1+w2,[with_totals(left),with_totals(right)])
+    ends = [with_totals(end(s)) for s in sides(m)]
+    total = sum([root(s) for s in ends])
+    return tree(total, [side(length(s), t) for s, t in zip(sides(m), ends)])
+
 
 ############
 # Mutation #

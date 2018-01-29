@@ -28,6 +28,7 @@ class Fib():
         # else:
         #     self.value=self.previous+self.value
         #     self.previous=self.value-self.previous
+        #     print(self.previous,self.value)
         # return self
         if self.value==0:
             result=Fib()
@@ -35,7 +36,6 @@ class Fib():
         else:
             result=Fib()
             result.value=self.previous+self.value
-        # self.previous,self.value=self.value,result.value
         result.previous = self.value
         return result
 
@@ -76,6 +76,36 @@ class VendingMachine:
     'Here is your soda.'
     """
     "*** YOUR CODE HERE ***"
+    def __init__(self,object_name,object_price):
+        self.name=object_name
+        self.price=object_price
+        self.number=0
+        self.balance=0
+    def vend(self):
+        if self.number<=0:
+            return 'Machine is out of stock.'
+        elif self.balance<self.price:
+            diff=self.price-self.balance
+            return 'You must deposit ${0} more.'.format(diff)
+        elif self.balance>self.price:
+            diff=self.balance-self.price
+            self.balance=0
+            self.number -= 1
+            return 'Here is your {0} and ${1} change.'.format(self.name,diff)
+        else:
+            self.balance -= self.price
+            self.number -= 1
+            return 'Here is your {0}.'.format(self.name)
+
+    def restock(self,n):
+        self.number += n
+        return "Current {0} stock: {1}".format(self.name,self.number)
+    def deposit(self,x):
+        self.balance += x
+        if self.number>0:
+            return 'Current balance: ${0}'.format(self.balance)
+        else:
+            return 'Machine is out of stock. Here is your ${0}.'.format(self.balance)
 
 class MissManners:
     """A container class that only forward messages that say please.
