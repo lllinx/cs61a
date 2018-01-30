@@ -145,4 +145,8 @@ class MissManners:
         magic_word = 'please '
         if not message.startswith(magic_word):
             return 'You must learn to say please first.'
-        "*** YOUR CODE HERE ***"
+        attr=message[len(magic_word):]
+        if not hasattr(self.obj,attr):
+            return 'Thanks for asking, but I know not how to {0}.'.format(attr)
+        return getattr(self.obj,attr)(*args)
+        
