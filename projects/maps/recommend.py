@@ -77,7 +77,8 @@ def k_means(restaurants, k, max_updates=100):
     while old_centroids != centroids and n < max_updates:
         old_centroids = centroids
         # BEGIN Question 6
-        "*** REPLACE THIS LINE ***"
+        new_cluster=group_by_centroid(restaurants,old_centroids)
+        centroids=[find_centroid(cluster) for cluster in new_cluster]
         # END Question 6
         n += 1
     return centroids
@@ -105,8 +106,13 @@ def find_predictor(user, restaurants, feature_fn):
     ys = [reviews_by_user[restaurant_name(r)] for r in restaurants]
 
     # BEGIN Question 7
-    "*** REPLACE THIS LINE ***"
-    b, a, r_squared = 0, 0, 0  # REPLACE THIS LINE WITH YOUR SOLUTION
+    mean_x,mean_y=mean(xs),mean(ys)
+    sxx=sum([pow(x-mean_x,2) for x in xs],0)
+    syy=sum([pow(y-mean_y,2) for y in ys],0)
+    sxy=sum([(x-mean_x)*(y-mean_y) for x,y in zip(xs,ys)],0)
+    b = sxy/sxx
+    a = mean_y-b*mean_x
+    r_squared = pow(sxy,2)/(sxx*syy)
     # END Question 7
 
     def predictor(restaurant):
@@ -126,7 +132,10 @@ def best_predictor(user, restaurants, feature_fns):
     """
     reviewed = user_reviewed_restaurants(user, restaurants)
     # BEGIN Question 8
-    "*** REPLACE THIS LINE ***"
+    result={}
+    for feature in feature_fns:
+        result.append(find_predictor(user,reviewed,feature))
+    return max(result,key=lambda x:result[x])
     # END Question 8
 
 
