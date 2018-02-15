@@ -9,7 +9,10 @@ def list_to_link(lst):
     <1 2 3>
     """
     "*** YOUR CODE HERE ***"
-
+    if not lst:
+        return Link.empty
+    else:
+        return Link(lst[0],list_to_link(lst[1:]))
 # Q3
 def link_to_list(link):
     """Takes a Link and returns a Python list with the same elements.
@@ -21,6 +24,12 @@ def link_to_list(link):
     []
     """
     "*** YOUR CODE HERE ***"
+    lst=[]
+    while link is not Link.empty:
+        first=link.first
+        lst.append(first)
+        link=link.rest
+    return lst
 
 # Q4
 def remove_all(link , value):
@@ -38,6 +47,13 @@ def remove_all(link , value):
     <0 1>
     """
     "*** YOUR CODE HERE ***"
+    if link is Link.empty or link.rest is Link.empty:
+        return
+    elif link.rest.first==value:
+        link.rest=link.rest.rest
+        return remove_all(link,value)
+    else:
+        return remove_all(link.rest,value)
 
 # Linked List Class
 class Link:
