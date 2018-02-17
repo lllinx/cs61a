@@ -26,8 +26,7 @@ def link_to_list(link):
     "*** YOUR CODE HERE ***"
     lst=[]
     while link is not Link.empty:
-        first=link.first
-        lst.append(first)
+        lst.append(link.first)
         link=link.rest
     return lst
 
