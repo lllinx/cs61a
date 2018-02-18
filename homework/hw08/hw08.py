@@ -18,3 +18,10 @@ def deep_len(lst):
     100
     """
     "*** YOUR CODE HERE ***"
+    if lst is []:
+        return 0
+    elif isinstance(lst,int):
+        return 1
+    else:
+        return sum([deep_len(b) for b in lst])
+
