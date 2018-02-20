@@ -199,7 +199,14 @@ class ThrowerAnt(Ant):
         """
         # BEGIN Problem 3B
         "*** REPLACE THIS LINE ***"
-        return random_or_none(self.place.bees)
+        def inner(place):
+            if len(place.bees)>0 and type(place) is not Hive:
+                return random_or_none(place.bees)
+            elif place.entrance is not None:
+                return inner(place.entrance)
+            else:
+                return None
+        return inner(self.place)
         # END Problem 3B
 
     def throw_at(self, target):
@@ -252,12 +259,16 @@ class FireAnt(Ant):
         """
         # BEGIN Problem 4A
         "*** REPLACE THIS LINE ***"
-        if self.armor <= 0:
-            self.place.remove_insect(self)
-            for bee in self.place.bees:
-                bee.armor -= self.damage
+        if self.armor <= amount:
+            new_bee = list(self.place.bees)
+            # for bee in self.place.bees[:] if not use list, refer 2.4 mutable list, if not copy, then for loop may miss some elements
+            for bee in new_bee:
+                bee.reduce_armor(self.damage)
+        # self.armor -= amount
+        # if self.armor <=0:
+        #     self.place.remove_insect(self)
+        Insect.reduce_armor(self,amount)
         
-
 
         # END Problem 4A
 
