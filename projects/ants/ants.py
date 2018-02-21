@@ -140,7 +140,9 @@ class Bee(Insect):
         # Phase 3: Special handling for NinjaAnt
         # BEGIN Problem 6A
         "*** REPLACE THIS LINE ***"
-        return self.place.ant is not None
+        if self.place.ant is None or self.place.ant.blocks_path==False:
+            return False
+        return True
         # END Problem 6A
 
     def action(self, colony):
@@ -161,11 +163,20 @@ class Ant(Insect):
     is_ant = True
     implemented = False  # Only implemented Ant classes should be instantiated
     food_cost = 0
+    blocks_path = True
 
     def __init__(self, armor=1):
         """Create an Ant with an ARMOR quantity."""
         Insect.__init__(self, armor)
 
+class WallAnt(Ant):
+    """Wall ant has a large armor value"""
+    name = 'Wall'
+    implemented = True
+    food_cost = 4
+    def __init__(self,armor=4):
+        """Create an Ant with an ARMOR quantity."""
+        Ant.__init__(self, armor)
 
 class HarvesterAnt(Ant):
     """HarvesterAnt produces 1 additional food per turn for the colony."""
@@ -306,12 +317,18 @@ class NinjaAnt(Ant):
     damage = 1
     # BEGIN Problem 6A
     "*** REPLACE THIS LINE ***"
-    implemented = False   # Change to True to view in the GUI
+    implemented = True
+    blocks_path = False   # Change to True to view in the GUI
+    food_cost = 5
     # END Problem 6A
 
     def action(self, colony):
         # BEGIN Problem 6A
         "*** REPLACE THIS LINE ***"
+        new_bee = list(self.place.bees)
+        for bee in new_bee:
+            bee.reduce_armor(self.damage)
+
         # END Problem 6A
 
 
@@ -319,6 +336,11 @@ class NinjaAnt(Ant):
 "*** REPLACE THIS LINE ***"
 # The ScubaThrower class
 # END Problem 5B
+class ScubaThrower(ThrowerAnt):
+    name = 'Scuba'
+    food_cost = 6
+    implemented = True
+    watersafe = True
 
 
 class HungryAnt(Ant):
