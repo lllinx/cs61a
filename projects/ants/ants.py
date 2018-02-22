@@ -350,22 +350,34 @@ class HungryAnt(Ant):
     name = 'Hungry'
     # BEGIN Problem 6B
     "*** REPLACE THIS LINE ***"
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
+    food_cost = 4
+    time_to_digest = 3
     # END Problem 6B
 
     def __init__(self):
         # BEGIN Problem 6B
         "*** REPLACE THIS LINE ***"
+        Ant.__init__(self)
+        self.digesting = 0
         # END Problem 6B
 
-    def eat_bee(self, bee):
+    def eat_bee(self,bee):
         # BEGIN Problem 6B
         "*** REPLACE THIS LINE ***"
+        bee.armor = 0
+        self.digesting = 3
         # END Problem 6B
 
     def action(self, colony):
         # BEGIN Problem 6B
         "*** REPLACE THIS LINE ***"
+        if self.digesting==0:
+            bee=random_or_none(self.place.bees)
+            if bee:
+                self.eat_bee(bee)
+        else:
+            self.digesting -= 1
         # END Problem 6B
 
 
