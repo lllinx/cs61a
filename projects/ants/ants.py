@@ -46,7 +46,14 @@ class Place(object):
                 # Phase 4: Special handling for BodyguardAnt
                 # BEGIN Problem 7
                 "*** REPLACE THIS LINE ***"
-                assert self.ant is None, 'Two ants in {0}'.format(self)
+                if self.ant.can_contain(insect):
+                    self.ant.contain_ant(insect)
+                elif insect.can_contain(self.ant):
+                    insect.contain_ant(self.ant)
+                    self.ant=insect
+                else:
+                    assert self.ant is None, 'Two ants in {0}'.format(self)
+                    self.ant = insect
                 # END Problem 7
         else:
             self.bees.append(insect)
@@ -164,10 +171,16 @@ class Ant(Insect):
     implemented = False  # Only implemented Ant classes should be instantiated
     food_cost = 0
     blocks_path = True
+    container = False
 
     def __init__(self, armor=1):
         """Create an Ant with an ARMOR quantity."""
         Insect.__init__(self, armor)
+    def can_contain(self, other_ant):
+        if self.container==True and self.ant==None and other_ant.container==False:
+            return True
+        return False
+
 
 class WallAnt(Ant):
     """Wall ant has a large armor value"""
@@ -365,19 +378,21 @@ class HungryAnt(Ant):
     def eat_bee(self,bee):
         # BEGIN Problem 6B
         "*** REPLACE THIS LINE ***"
-        bee.armor = 0
-        self.digesting = 3
+        bee.reduce_armor(bee.armor)
+
         # END Problem 6B
 
     def action(self, colony):
         # BEGIN Problem 6B
         "*** REPLACE THIS LINE ***"
-        if self.digesting==0:
+        if self.digesting>0:
+            self.digesting -= 1
+        elif self.digesting==0:
             bee=random_or_none(self.place.bees)
             if bee:
                 self.eat_bee(bee)
-        else:
-            self.digesting -= 1
+                self.digesting = self.time_to_digest
+            
         # END Problem 6B
 
 
@@ -386,7 +401,9 @@ class BodyguardAnt(Ant):
     name = 'Bodyguard'
     # BEGIN Problem 7
     "*** REPLACE THIS LINE ***"
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
+    food_cost = 4
+    container = True
     # END Problem 7
 
     def __init__(self):
@@ -396,11 +413,14 @@ class BodyguardAnt(Ant):
     def contain_ant(self, ant):
         # BEGIN Problem 7
         "*** REPLACE THIS LINE ***"
+        self.ant = ant
         # END Problem 7
 
     def action(self, colony):
         # BEGIN Problem 7
         "*** REPLACE THIS LINE ***"
+        if hasattr(self.ant, 'action'):
+            self.ant.action(colony)
         # END Problem 7
 
 class TankAnt(BodyguardAnt):
@@ -409,12 +429,18 @@ class TankAnt(BodyguardAnt):
     damage = 1
     # BEGIN Problem 8
     "*** REPLACE THIS LINE ***"
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
+    food_cost = 6
     # END Problem 8
 
     def action(self, colony):
         # BEGIN Problem 8
         "*** REPLACE THIS LINE ***"
+        if hasattr(self.ant, 'action'):
+            self.ant.action(colony)
+        new_bee=list(self.place.bees)
+        for bee in new_bee:
+            bee.reduce_armor(self.damage)
         # END Problem 8
 
 class QueenAnt(Ant):  # You should change this line
