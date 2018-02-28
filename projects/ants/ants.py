@@ -71,6 +71,7 @@ class Place(object):
         """
         if insect.is_ant:
             # Phase 4: Special Handling for BodyguardAnt and QueenAnt
+
             if self.ant is insect:
                 if hasattr(self.ant, 'container') and self.ant.container:
                     self.ant = self.ant.ant
@@ -450,11 +451,14 @@ class QueenAnt(Ant):  # You should change this line
     # BEGIN Problem 9
     "*** REPLACE THIS LINE ***"
     implemented = False   # Change to True to view in the GUI
+    food_cost = 7
+    watersafe = True
     # END Problem 9
 
     def __init__(self):
         # BEGIN Problem 9
         "*** REPLACE THIS LINE ***"
+        Ant.__init__(self, 1)
         # END Problem 9
 
     def action(self, colony):
@@ -465,6 +469,23 @@ class QueenAnt(Ant):  # You should change this line
         """
         # BEGIN Problem 9
         "*** REPLACE THIS LINE ***"
+        double_ant =[]
+        next_place=self.place
+        while next_place.exit is not None:
+            next_place=next_place.exit
+            if isinstance(next_place.ant,QueenAnt):
+                next_place.ant.armor=0
+        next_place=self.place
+        while next_place.entrance is not None:
+            next_place=next_place.entrance
+            if isinstance(next_place.ant,QueenAnt):
+                next_place.ant.armor=0
+        next_place=self.place
+        while next_place.exit is not None:
+            next_place=next_place.exit
+            if next_place.ant:
+                next_place.ant.damage=2
+                double_ant.append(next_place.ant)
         # END Problem 9
 
     def reduce_armor(self, amount):
@@ -473,6 +494,9 @@ class QueenAnt(Ant):  # You should change this line
         """
         # BEGIN Problem 9
         "*** REPLACE THIS LINE ***"
+        if self.armor==0:
+            bees_win()
+        self.armor -= amount
         # END Problem 9
 
 class AntRemover(Ant):
