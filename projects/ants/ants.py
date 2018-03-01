@@ -71,7 +71,8 @@ class Place(object):
         """
         if insect.is_ant:
             # Phase 4: Special Handling for BodyguardAnt and QueenAnt
-
+            if isinstance(insect, QueenAnt) and insect.true_queen==True:
+                return
             if self.ant is insect:
                 if hasattr(self.ant, 'container') and self.ant.container:
                     self.ant = self.ant.ant
@@ -444,7 +445,7 @@ class TankAnt(BodyguardAnt):
             bee.reduce_armor(self.damage)
         # END Problem 8
 
-class QueenAnt(Ant):  # You should change this line
+class QueenAnt(ScubaThrower):  # You should change this line
     """The Queen of the colony.  The game is over if a bee enters her place."""
 
     name = 'Queen'
@@ -453,12 +454,19 @@ class QueenAnt(Ant):  # You should change this line
     implemented = False   # Change to True to view in the GUI
     food_cost = 7
     watersafe = True
+    total_queen = 0
+    double_ant =[]
     # END Problem 9
 
     def __init__(self):
         # BEGIN Problem 9
         "*** REPLACE THIS LINE ***"
-        Ant.__init__(self, 1)
+        ScubaThrower.__init__(self)
+        if QueenAnt.total_queen==0:
+            self.true_queen=True
+        else:
+            self.true_queen=False
+        QueenAnt.total_queen+=1
         # END Problem 9
 
     def action(self, colony):
@@ -469,23 +477,30 @@ class QueenAnt(Ant):  # You should change this line
         """
         # BEGIN Problem 9
         "*** REPLACE THIS LINE ***"
-        double_ant =[]
-        next_place=self.place
-        while next_place.exit is not None:
-            next_place=next_place.exit
-            if isinstance(next_place.ant,QueenAnt):
-                next_place.ant.armor=0
-        next_place=self.place
-        while next_place.entrance is not None:
-            next_place=next_place.entrance
-            if isinstance(next_place.ant,QueenAnt):
-                next_place.ant.armor=0
-        next_place=self.place
-        while next_place.exit is not None:
-            next_place=next_place.exit
-            if next_place.ant:
-                next_place.ant.damage=2
-                double_ant.append(next_place.ant)
+        if self.true_queen:
+            ThrowerAnt.action(self,colony)
+
+        #get all of the place#
+            place=self.place
+            all_place=[]
+            while not place==None:
+                all_place.append(place)
+                place=place.exit      
+        #get all ants#
+            ants=[]
+            for p in all_place:
+                if not p.ant==None:
+                    if isinstance(p.ant,BodyguardAnt) and p.ant.ant:
+                        ants.append(p.ant.ant)
+                    ants.append(p.ant)
+        #double damage#
+            for ant in ants:
+                if not isinstance(ant, QueenAnt) and ant not in QueenAnt.double_ant:
+                    ant.damage=ant.damage*2
+                    QueenAnt.double_ant.append(ant)
+        else:
+            self.reduce_armor(self.armor)
+
         # END Problem 9
 
     def reduce_armor(self, amount):
@@ -494,9 +509,9 @@ class QueenAnt(Ant):  # You should change this line
         """
         # BEGIN Problem 9
         "*** REPLACE THIS LINE ***"
-        if self.armor==0:
+        Insect.reduce_armor(self,amount)
+        if self.true_queen and self.armor==0:
             bees_win()
-        self.armor -= amount
         # END Problem 9
 
 class AntRemover(Ant):
