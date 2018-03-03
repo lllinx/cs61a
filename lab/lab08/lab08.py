@@ -12,6 +12,12 @@ def deep_len(lnk):
     5
     """
     "*** YOUR CODE HERE ***"
+    if lnk is Link.empty:
+        return 0
+    elif isinstance(lnk.first, int):
+        return 1+deep_len(lnk.rest)
+    elif isinstance(lnk.first, Link):
+        return deep_len(lnk.first)+deep_len(lnk.rest)
 
 def make_to_string(front, mid, back, empty_repr):
     """ Returns a function that turns linked lists to strings.
@@ -29,6 +35,13 @@ def make_to_string(front, mid, back, empty_repr):
     '()'
     """
     "*** YOUR CODE HERE ***"
+    def transform_string(lnk):
+        if lnk == Link.empty:
+            return empty_repr
+        else:
+            return front + str(lnk.first) + mid + transform_string(lnk.rest) + back
+    return transform_string
+
 
 def tree_map(fn, t):
     """Maps the function fn over the entries of tree and returns the
