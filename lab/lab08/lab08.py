@@ -66,6 +66,10 @@ def tree_map(fn, t):
         256
     """
     "*** YOUR CODE HERE ***"
+    if t.is_leaf():
+        return Tree(fn(t.root),[])
+    else:
+        return Tree(fn(t.root),[tree_map(fn,b) for b in t.branches])
 
 def add_trees(t1, t2):
     """
