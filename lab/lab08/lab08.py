@@ -107,6 +107,13 @@ def add_trees(t1, t2):
       5
     """
     "*** YOUR CODE HERE ***"
+    if not t1:
+        return t2
+    elif not t2:
+        return t1
+    else:
+        new_root = t1.root + t2.root
+        return Tree(new_root,[add_trees(b1,b2) for b1,b2 in zip(list(t1.branches), list(t2.branches))])
 
 # Link
 class Link:
