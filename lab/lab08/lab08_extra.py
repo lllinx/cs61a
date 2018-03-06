@@ -28,6 +28,24 @@ def make_advanced_counter_maker():
     1
     """
     "*** YOUR CODE HERE ***"
+    global_count = 0
+    def inner1():
+        count = 0
+        def inner2(x):
+            nonlocal global_count, count
+            if x=='count':
+                count += 1
+                return count
+            elif x=='global-count':
+                global_count += 1
+                return global_count
+            elif x=='reset':
+                count = 0
+            elif x=='global-reset':
+                global_count = 0
+        return inner2
+    return inner1   
+
 
 def trade(first, second):
     """Exchange the smallest prefixes of first and second that have equal sum.
@@ -57,11 +75,20 @@ def trade(first, second):
     [4, 3, 1, 4, 1]
     """
     m, n = 1, 1
-
+    case = False
     "*** YOUR CODE HERE ***"
+    first_sum = [sum(first[:i]) for i in range(1,len(first)+1)]
+    second_sum = [sum(second[:i]) for i in range(1,len(second)+1)]
+    i=0
+    while case is False and i<len(first_sum):
+        if first_sum[i] in second_sum:
+            m = i
+            n = second_sum.index(first_sum[i])
+            case = True
+        i+=1
 
-    if False: # change this line!
-        first[:m], second[:n] = second[:n], first[:m]
+    if case: # change this line!
+        first[:m+1], second[:n+1] = second[:n+1], first[:m+1]
         return 'Deal!'
     else:
         return 'No deal!'

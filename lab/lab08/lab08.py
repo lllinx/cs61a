@@ -112,8 +112,12 @@ def add_trees(t1, t2):
     elif not t2:
         return t1
     else:
-        new_root = t1.root + t2.root
-        return Tree(new_root,[add_trees(b1,b2) for b1,b2 in zip(list(t1.branches), list(t2.branches))])
+        t1_branches, t2_branches = list(t1.branches), list(t2.branches)
+        if len(t1_branches)<len(t2.branches):
+            t1_branches += [None for _ in range(len(t2_branches)-len(t1_branches))]
+        if len(t1_branches)>len(t2.branches):
+            t2_branches += [None for _ in range(len(t1_branches)-len(t2_branches))]
+        return Tree(t1.root+t2.root,[add_trees(b1,b2) for b1,b2 in zip(list(t1_branches), list(t2_branches))])
 
 # Link
 class Link:
