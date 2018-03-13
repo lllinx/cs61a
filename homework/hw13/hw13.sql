@@ -29,11 +29,11 @@ create table sizes as
 
 -- The size of each dog
 create table size_of_dogs as
-  select "REPLACE THIS LINE WITH YOUR SOLUTION";
+  select a.name, b.size from dogs as a, sizes as b where height>min and height<=max;
 
 -- All dogs with parents ordered by decreasing height of their parent
 create table by_height as
-  select "REPLACE THIS LINE WITH YOUR SOLUTION";
+  select parents.child from dogs, parents where dogs.name=parents.parent order by dogs.height desc;
 
 -- Sentences about siblings that are the same size
 create table sentences as
@@ -46,7 +46,10 @@ create table stacks as
 -- non_parents is an optional, but recommended question
 -- All non-parent relations ordered by height difference
 create table non_parents as
-  select "REPLACE THIS LINE WITH YOUR SOLUTION";
+  with gran(granparent,granchild) as (
+  select a.parent,b.child from parents as a, parents as b where a.child=b.parent
+  )
+  
 
 create table ints as
     with i(n) as (
