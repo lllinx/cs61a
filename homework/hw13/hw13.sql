@@ -37,18 +37,32 @@ create table by_height as
 
 -- Sentences about siblings that are the same size
 create table sentences as
-  select "REPLACE THIS LINE WITH YOUR SOLUTION";
+  with sibling(name1,name2,height1,height2) as (
+    select a.child, b.child,c.height,d.height from parents as a, parents as b, dogs as c, dogs as d 
+    where a.parent=b.parent and a.child<b.child and a.child=c.name and b.child=d.name
+    )
+  select name1 || " and " || name2 || " are " || f.size || " siblings" 
+  from sibling as e, sizes as f where e.height1>f.min and e.height1<=f.max and e.height2>f.min and e.height2<=f.max;
 
 -- Ways to stack 4 dogs to a height of at least 170, ordered by total height
 create table stacks as
-  select "REPLACE THIS LINE WITH YOUR SOLUTION";
+  select a.name || ", " || b.name || ", " || c.name || ", " || d.name, a.height+b.height+c.height+d.height as total
+  from dogs as a, dogs as b, dogs as c, dogs as d where total>170 and a.height<b.height and b.height<c.height and c.height<d.height
+  order by total asc;
+
+####how to create recursive local table#### 
+-- create table stacks as
+--   with stack(name,height) as (
+--     select name, height from dogs union
+--     select stack.name, dogs.name,  from stack, dogs where 
+--     )
 
 -- non_parents is an optional, but recommended question
 -- All non-parent relations ordered by height difference
-create table non_parents as
-  with gran(granparent,granchild) as (
-  select a.parent,b.child from parents as a, parents as b where a.child=b.parent
-  )
+-- create table non_parents as
+--   with gran(granparent,granchild) as (
+--   select a.parent,b.child from parents as a, parents as b where a.child=b.parent
+--   )
   
 
 create table ints as
