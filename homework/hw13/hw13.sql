@@ -45,17 +45,18 @@ create table sentences as
   from sibling as e, sizes as f where e.height1>f.min and e.height1<=f.max and e.height2>f.min and e.height2<=f.max;
 
 -- Ways to stack 4 dogs to a height of at least 170, ordered by total height
-create table stacks as
-  select a.name || ", " || b.name || ", " || c.name || ", " || d.name, a.height+b.height+c.height+d.height as total
-  from dogs as a, dogs as b, dogs as c, dogs as d where total>170 and a.height<b.height and b.height<c.height and c.height<d.height
-  order by total asc;
-
-####how to create recursive local table#### 
 -- create table stacks as
---   with stack(name,height) as (
---     select name, height from dogs union
---     select stack.name, dogs.name,  from stack, dogs where 
---     )
+--   select a.name || ", " || b.name || ", " || c.name || ", " || d.name, a.height+b.height+c.height+d.height as total
+--   from dogs as a, dogs as b, dogs as c, dogs as d where total>170 and a.height<b.height and b.height<c.height and c.height<d.height
+--   order by total asc;
+
+create table stacks as
+  with sta(name, stack_number, height_now, total_height) as (
+    select name, 1, height, height from dogs union
+    select sta.name || ", " || dogs.name, sta.stack_number+1, dogs.height, sta.total_height+dogs.height from sta, dogs 
+    where sta.height_now < dogs.height and stack_number<=3
+    )
+  select name, total_height from sta where total_height>=170 order by total_height asc;
 
 -- non_parents is an optional, but recommended question
 -- All non-parent relations ordered by height difference
